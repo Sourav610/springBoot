@@ -16,4 +16,9 @@ public class UserDetailDAOImpl implements UserDetailDAO {
     public UserDetailsEntity findByEmail(String email) {
         return userDetailRepository.findByEmail(email);
     }
+
+    @Override
+    public UserDetailsEntity save(UserDetailsEntity userDetails) {
+        return userDetailRepository.save(userDetails);
+    }
 }

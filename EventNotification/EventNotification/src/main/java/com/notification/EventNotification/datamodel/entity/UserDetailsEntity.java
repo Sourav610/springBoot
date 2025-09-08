@@ -1,12 +1,22 @@
 package com.notification.EventNotification.datamodel.entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.Data;
+
+import java.util.Date;
 
 @Entity
 @Data
 public class UserDetailsEntity {
-    String fullName;
-    String email;
-    String password;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+    private String fullName;
+    private String email;
+    private String password;
+    private Date createdOn;
+    private Date updatedOn;
 }
