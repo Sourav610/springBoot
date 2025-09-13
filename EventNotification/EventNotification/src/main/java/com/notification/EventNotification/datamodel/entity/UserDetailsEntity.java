@@ -19,4 +19,5 @@ public class UserDetailsEntity {
     private String password;
     private Date createdOn;
     private Date updatedOn;
+    private boolean isOnline;
 }
