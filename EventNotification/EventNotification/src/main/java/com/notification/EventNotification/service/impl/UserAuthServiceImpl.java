@@ -55,7 +55,11 @@ public class UserAuthServiceImpl implements UserAuthService {
         newUser.setOnline(false);
 
         userDetailDAO.save(newUser);
-        return ResponseEntity.status(HttpStatus.CREATED).body("User registered successfully");
+        Map<String,Object>response = new HashMap<>();
+        response.put("code",200);
+        response.put("message","User registered successfully");
+        response.put("status","success");
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @Override
