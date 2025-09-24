@@ -1,9 +1,6 @@
 package com.notification.EventNotification.datamodel.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.Date;
@@ -15,6 +12,7 @@ public class UserDetailsEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String fullName;
+    @Column(unique = true)
     private String email;
     private String password;
     private Date createdOn;
