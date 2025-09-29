@@ -39,7 +39,7 @@ public class UserAuthServiceImpl implements UserAuthService {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Wrong Password");
             }
 
-            String token = jwtUtil.generateToken(email);
+            String token = jwtUtil.generateToken(userDetails);
             userDetails.setOnline(true);
             userDetailDAO.save(userDetails);
             Map<String,Object> response = new HashMap<>();

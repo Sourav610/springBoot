@@ -1,4 +1,4 @@
-CREATE TABLE event_details (
+CREATE TABLE IF NOT EXISTS event_details (
     id INT PRIMARY KEY AUTO_INCREMENT,
     event_date DATE,
     person_name VARCHAR(256),
@@ -6,7 +6,7 @@ CREATE TABLE event_details (
     mobile_number VARCHAR(15)
 );
 
-CREATE TABLE notifications (
+CREATE TABLE IF NOT EXISTS notifications (
     id INT PRIMARY KEY AUTO_INCREMENT,
     created_on DATETIME,
     created_by VARCHAR(64),

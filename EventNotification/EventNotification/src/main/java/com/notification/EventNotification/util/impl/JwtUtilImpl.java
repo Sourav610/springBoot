@@ -1,5 +1,6 @@
 package com.notification.EventNotification.util.impl;
 
+import com.notification.EventNotification.datamodel.entity.UserDetailsEntity;
 import com.notification.EventNotification.util.JwtUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -29,9 +30,10 @@ public class JwtUtilImpl implements JwtUtil {
     }
 
     @Override
-    public String generateToken(String email) {
+    public String generateToken(UserDetailsEntity userDetails) {
         return Jwts.builder()
-                .claim("email", email)
+                .claim("email", userDetails.getEmail())
+                .claim("username",userDetails.getFullName())
                 .issuedAt(new java.util.Date())
                 .expiration(new java.util.Date(System.currentTimeMillis() + expirationTime)) // 10 hours
                 .signWith(key)
