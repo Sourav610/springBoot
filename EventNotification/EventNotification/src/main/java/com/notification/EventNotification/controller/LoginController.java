@@ -58,4 +58,9 @@ public class LoginController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error during signup");
         }
     }
+
+    public ResponseEntity<?>logout(@RequestBody String token){
+        log.info("Inside logout request..");
+        return userAuthService.logout(token);
+    }
 }

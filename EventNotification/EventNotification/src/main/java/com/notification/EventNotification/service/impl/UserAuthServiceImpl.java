@@ -1,7 +1,9 @@
 package com.notification.EventNotification.service.impl;
 
 import com.fasterxml.jackson.databind.util.JSONPObject;
+import com.notification.EventNotification.datamodel.dao.JwtBlackListDAO;
 import com.notification.EventNotification.datamodel.dao.UserDetailDAO;
+import com.notification.EventNotification.datamodel.entity.JwtBlackList;
 import com.notification.EventNotification.datamodel.entity.UserDetailsEntity;
 import com.notification.EventNotification.service.UserAuthService;
 import com.notification.EventNotification.util.JwtUtil;
@@ -26,6 +28,8 @@ public class UserAuthServiceImpl implements UserAuthService {
     private final JwtUtil jwtUtil;
 
     private final UserDetailDAO userDetailDAO;
+
+    private final JwtBlackListDAO jwtBlackListDAO;
     @Override
     public ResponseEntity<?> login(String email, String password) {
         log.info("Inside the login service for email: {}",email);
@@ -97,6 +101,13 @@ public class UserAuthServiceImpl implements UserAuthService {
             if(userDetails == null){
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
             }
+
+            JwtBlackList jwtBlackList = new JwtBlackList();
+            jwtBlackList.setToken(token);
+            jwtBlackList.setCreatedOn(new Date());
+            jwtBlackList.setExpiryDate(expiration);
+            jwtBlackListDAO.save(jwtBlackList);
+
             userDetails.setOnline(false);
             userDetailDAO.save(userDetails);
             Map<String,Object> response = new HashMap<>();
