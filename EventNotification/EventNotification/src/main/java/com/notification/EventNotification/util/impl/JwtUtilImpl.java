@@ -50,14 +50,15 @@ public class JwtUtilImpl implements JwtUtil {
         token = token.substring(index+7);
         try {
             Claims claims = Jwts.parser()
-                    .decryptWith((SecretKey)key)
+                    .verifyWith((SecretKey)key)
                     .build()
                     .parseSignedClaims(token)
                     .getPayload();
 
 
             Map<String, Object> payload = new HashMap<>();
-            payload.put("subject", claims.getSubject());
+            payload.put("email", claims.get("email"));
+            payload.put("username", claims.get("username"));
             payload.put("expiration", claims.getExpiration());
             return payload;
         }catch (ExpiredJwtException e){
@@ -83,7 +84,8 @@ public class JwtUtilImpl implements JwtUtil {
 
     private Map<String, Object> buildPayload(Claims claims) {
         Map<String, Object> payload = new HashMap<>();
-        payload.put("subject", claims.getSubject());
+        payload.put("email", claims.get("email"));
+        payload.put("username", claims.get("username"));
         payload.put("expiration", claims.getExpiration());
         return payload;
     }

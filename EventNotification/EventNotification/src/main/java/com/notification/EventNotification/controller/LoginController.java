@@ -59,6 +59,7 @@ public class LoginController {
         }
     }
 
+    @PostMapping("/logout")
     public ResponseEntity<?>logout(@RequestBody String token){
         log.info("Inside logout request..");
         return userAuthService.logout(token);

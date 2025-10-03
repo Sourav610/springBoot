@@ -91,13 +91,12 @@ public class UserAuthServiceImpl implements UserAuthService {
             if (tokenPayload == null) {
                 return ResponseEntity.badRequest().body("Invalid token");
             }
-            JSONObject userData = new JSONObject(tokenPayload);
-            JSONObject subject = new JSONObject(userData.getString("subject"));
+
             Date expiration = (Date) tokenPayload.get("expiration");
             if (expiration.before(new Date())) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token expired");
             }
-            UserDetailsEntity userDetails = userDetailDAO.findByEmail(subject.get("email").toString());
+            UserDetailsEntity userDetails = userDetailDAO.findByEmail(tokenPayload.get("email").toString());
             if(userDetails == null){
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
             }
