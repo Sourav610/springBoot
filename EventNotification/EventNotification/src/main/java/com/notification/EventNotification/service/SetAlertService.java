@@ -1,7 +1,8 @@
 package com.notification.EventNotification.service;
 
 import com.notification.EventNotification.dto.SetAlertRequest;
+import org.springframework.http.ResponseEntity;
 
 public interface SetAlertService {
-    public String pushAlertData(SetAlertRequest setAlertRequest);
+     ResponseEntity<?> pushAlertData(SetAlertRequest setAlertRequest);
 }

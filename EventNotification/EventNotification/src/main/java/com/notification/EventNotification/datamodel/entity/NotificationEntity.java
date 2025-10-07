@@ -18,5 +18,6 @@ public class NotificationEntity {
     private String notificationType;
     private int alertLimit;
     private int eventDetailsId;
+    private int userId;
 
 }

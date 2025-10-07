@@ -10,4 +10,7 @@ public class SetAlertRequest {
     private String personName;
     private String mobileNumber;
     private String eventType;
+    private String eventTitle;
+    private String eventMessage;
+    private String email;
 }

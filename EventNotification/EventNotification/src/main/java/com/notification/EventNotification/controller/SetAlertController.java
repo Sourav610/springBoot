@@ -18,10 +18,9 @@ public class SetAlertController {
     @Autowired
     SetAlertServiceImpl setAlertService;
 
-    @PostMapping("/setAlert")
+    @PostMapping("/createAlert")
     public ResponseEntity<?> setAlert(@RequestBody SetAlertRequest setAlertRequest){
         log.info("inside set alert controller..");
-        String response = setAlertService.pushAlertData(setAlertRequest);
-        return ResponseEntity.ok(response);
+        return setAlertService.pushAlertData(setAlertRequest);
     }
 }
