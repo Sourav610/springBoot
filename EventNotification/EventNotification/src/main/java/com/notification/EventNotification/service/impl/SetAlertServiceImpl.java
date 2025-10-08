@@ -29,7 +29,7 @@ public class SetAlertServiceImpl implements SetAlertService {
         String personName = setAlertRequest.getPersonName();
         String mobileNo;
         String eventType = setAlertRequest.getEventType();
-        String email = setAlertRequest.getEmail();
+        String email = setAlertRequest.getPersonEmail();
         String eventTitle = setAlertRequest.getEventTitle();
         String eventMessage = setAlertRequest.getEventMessage();
 
@@ -50,7 +50,7 @@ public class SetAlertServiceImpl implements SetAlertService {
             eventDataEntity.setMobileNumber(mobileNo);
         }
         else{
-            if(setAlertRequest.getEmail() == null){
+            if(setAlertRequest.getPersonEmail() == null){
                 return apiResponseUtil.createResponse("Email is required for Email alert",null,400);
             }
             eventDataEntity.setEmail(email);

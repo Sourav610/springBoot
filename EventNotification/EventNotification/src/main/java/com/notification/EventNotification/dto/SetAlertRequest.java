@@ -12,5 +12,5 @@ public class SetAlertRequest {
     private String eventType;
     private String eventTitle;
     private String eventMessage;
-    private String email;
+    private String personEmail;
 }
