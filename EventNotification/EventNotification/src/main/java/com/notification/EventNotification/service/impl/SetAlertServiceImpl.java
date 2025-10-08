@@ -13,6 +13,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class SetAlertServiceImpl implements SetAlertService {
@@ -68,5 +71,21 @@ public class SetAlertServiceImpl implements SetAlertService {
             return apiResponseUtil.createResponse("Error saving event data",null,500);
         }
         return apiResponseUtil.createResponse("Alert set successfully",null,200);
+    }
+
+    @Override
+    public ResponseEntity<?> getAlertData(String userEmail) {
+        if(userEmail == null){
+            return apiResponseUtil.createResponse("Email is required",null,400);
+        }
+        UserDetailsEntity userDetails = userDetailDAO.findByEmail(userEmail);
+        if(userDetails == null){
+            return apiResponseUtil.createResponse("User not found with email: " + userEmail,null,400);
+        }
+
+        List<EventDataEntity> eventList = eventDetailsDao.findByUserId(userDetails.getId());
+        Map<String,Object> responseMap = new HashMap<>();
+        responseMap.put("events",eventList);
+        return apiResponseUtil.createResponse("Event list fetched successfully",responseMap,200);
     }
 }

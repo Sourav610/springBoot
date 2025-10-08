@@ -23,4 +23,9 @@ public class EventDetailsDaoImpl implements EventDetailsDao {
     public List<EventDataEntity> findAll() {
         return eventDetailsRepo.findAll();
     }
+
+    @Override
+    public List<EventDataEntity> findByUserId(int userId) {
+        return eventDetailsRepo.findByUserId(userId);
+    }
 }

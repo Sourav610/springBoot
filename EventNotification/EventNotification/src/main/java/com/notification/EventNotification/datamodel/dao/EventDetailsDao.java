@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface EventDetailsDao {
     List<EventDataEntity> findAll();
+
+    List<EventDataEntity> findByUserId(int userId);
 }
