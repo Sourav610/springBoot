@@ -27,7 +27,7 @@ public class SetAlertController {
 
     @PostMapping("/viewAlerts")
     public ResponseEntity<?>getAlerts(@RequestBody SetAlertRequest setAlertRequest){
-        log.info("inside get alert controller for email : {}", setAlertRequest.getPersonEmail());
-        return setAlertService.getAlertData(setAlertRequest.getPersonEmail());
+        log.info("inside get alert controller for email : {}", setAlertRequest.getUserEmail());
+        return setAlertService.getAlertData(setAlertRequest.getUserEmail());
     }
 }

@@ -20,5 +20,7 @@ public class EventDataEntity {
     private int userId;
     private String eventTitle;
     private String eventMessage;
+    private Date createdOn;
+    private Date updatedOn;
 
 }

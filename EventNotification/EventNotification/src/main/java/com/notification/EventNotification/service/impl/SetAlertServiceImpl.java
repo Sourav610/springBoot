@@ -32,28 +32,29 @@ public class SetAlertServiceImpl implements SetAlertService {
         String personName = setAlertRequest.getPersonName();
         String mobileNo;
         String eventType = setAlertRequest.getEventType();
-        String email = setAlertRequest.getPersonEmail();
+        String email = setAlertRequest.getNotifierEmail();
         String eventTitle = setAlertRequest.getEventTitle();
         String eventMessage = setAlertRequest.getEventMessage();
+        String userEmail = setAlertRequest.getUserEmail();
 
         if(personName == null || eventDate == null|| eventType == null || email == null || eventTitle == null || eventMessage == null){
             return apiResponseUtil.createResponse("All fields are required", null,400);
         }
 
-        UserDetailsEntity userDetails = userDetailDAO.findByEmail(email);
+        UserDetailsEntity userDetails = userDetailDAO.findByEmail(userEmail);
         if(userDetails == null){
             return apiResponseUtil.createResponse("User not found with email: " + email,null,400);
         }
         EventDataEntity eventDataEntity = new EventDataEntity();
         if(eventType.equalsIgnoreCase("SMS")){
-            if(setAlertRequest.getMobileNumber() == null){
+            if(setAlertRequest.getNotifierNumber() == null){
                 return apiResponseUtil.createResponse("Mobile number is required for SMS alert",null,400);
             }
-            mobileNo = setAlertRequest.getMobileNumber();
+            mobileNo = setAlertRequest.getNotifierNumber();
             eventDataEntity.setMobileNumber(mobileNo);
         }
         else{
-            if(setAlertRequest.getPersonEmail() == null){
+            if(setAlertRequest.getNotifierEmail() == null){
                 return apiResponseUtil.createResponse("Email is required for Email alert",null,400);
             }
             eventDataEntity.setEmail(email);
@@ -64,6 +65,9 @@ public class SetAlertServiceImpl implements SetAlertService {
         eventDataEntity.setUserId(userDetails.getId());
         eventDataEntity.setEventMessage(eventMessage);
         eventDataEntity.setEventTitle(eventTitle);
+        eventDataEntity.setEventType(eventType);
+        eventDataEntity.setCreatedOn(new Date());
+        eventDataEntity.setUpdatedOn(new Date());
 
         try {
             eventDetailsDao.save(eventDataEntity);
