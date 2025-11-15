@@ -37,9 +37,10 @@ public class SetAlertServiceImpl implements SetAlertService {
         String eventMessage = setAlertRequest.getEventMessage();
         String userEmail = setAlertRequest.getUserEmail();
 
-        if(personName == null || eventDate == null|| eventType == null || email == null || eventTitle == null || eventMessage == null){
+        if(personName == null || eventDate == null|| eventType == null || eventTitle == null || eventMessage == null){
             return apiResponseUtil.createResponse("All fields are required", null,400);
         }
+
 
         UserDetailsEntity userDetails = userDetailDAO.findByEmail(userEmail);
         if(userDetails == null){
