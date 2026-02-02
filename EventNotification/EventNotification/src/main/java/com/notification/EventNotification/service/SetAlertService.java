@@ -7,4 +7,6 @@ public interface SetAlertService {
      ResponseEntity<?> pushAlertData(SetAlertRequest setAlertRequest);
 
      ResponseEntity<?> getAlertData(String userEmail);
+
+     ResponseEntity<?> deleteAlerts(Integer id);
 }

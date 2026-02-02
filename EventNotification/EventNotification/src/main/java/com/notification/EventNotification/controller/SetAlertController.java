@@ -21,13 +21,19 @@ public class SetAlertController {
 
     @PostMapping("/createAlert")
     public ResponseEntity<?> setAlert(@RequestBody SetAlertRequest setAlertRequest){
-        log.info("inside set alert controller..");
+        log.info("Inside set alert controller..");
         return setAlertService.pushAlertData(setAlertRequest);
     }
 
     @PostMapping("/viewAlerts")
     public ResponseEntity<?>getAlerts(@RequestBody SetAlertRequest setAlertRequest){
-        log.info("inside get alert controller for email : {}", setAlertRequest.getUserEmail());
+        log.info("Inside get alert controller for email : {}", setAlertRequest.getUserEmail());
         return setAlertService.getAlertData(setAlertRequest.getUserEmail());
+    }
+
+    @PostMapping("/deleteAlert")
+    public ResponseEntity<?>deleteAlert(@RequestBody SetAlertRequest setAlertRequest){
+        log.info("Inside delete Alert for id: {}",setAlertRequest.getEventId());
+        return setAlertService.deleteAlerts(setAlertRequest.getEventId());
     }
 }

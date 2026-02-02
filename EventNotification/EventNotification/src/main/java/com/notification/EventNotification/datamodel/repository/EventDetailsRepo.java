@@ -12,4 +12,6 @@ public interface EventDetailsRepo extends JpaRepository<EventDataEntity,Integer>
     List<EventDataEntity> findAll();
 
     List<EventDataEntity> findByUserId(int userId);
+
+    EventDataEntity findById(int id);
 }

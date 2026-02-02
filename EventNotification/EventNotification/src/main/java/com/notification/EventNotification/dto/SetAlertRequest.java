@@ -16,4 +16,10 @@ public class SetAlertRequest {
     private Date createdOn;
     private Date updatedOn;
     private String userEmail;
+    private APIType apiType;
+    private Integer eventId;
+
+    public enum APIType{
+        CREATE,UPDATE
+    }
 }

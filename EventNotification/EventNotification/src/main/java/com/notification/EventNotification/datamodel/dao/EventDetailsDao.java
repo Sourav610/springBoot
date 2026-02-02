@@ -8,4 +8,8 @@ public interface EventDetailsDao {
     List<EventDataEntity> findAll();
 
     List<EventDataEntity> findByUserId(int userId);
+
+    EventDataEntity findById(int id);
+
+    void deleteById(int id);
 }

@@ -28,4 +28,14 @@ public class EventDetailsDaoImpl implements EventDetailsDao {
     public List<EventDataEntity> findByUserId(int userId) {
         return eventDetailsRepo.findByUserId(userId);
     }
+
+    @Override
+    public EventDataEntity findById(int id) {
+        return eventDetailsRepo.findById(id);
+    }
+
+    @Override
+    public void deleteById(int id){
+        eventDetailsRepo.deleteById(id);
+    }
 }
