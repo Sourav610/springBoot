@@ -20,6 +20,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import static java.time.LocalTime.now;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -42,9 +44,12 @@ public class UserAuthServiceImpl implements UserAuthService {
             if(!userDetails.getPassword().equals(password)){
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Wrong Password");
             }
+            if(userDetails.getLoginTime().after(userDetails.getLogoutTime())){
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("User Already Logged In");
+            }
 
             String token = jwtUtil.generateToken(userDetails);
-            userDetails.setOnline(true);
+            userDetails.setLoginTime(new Date());
             userDetailDAO.save(userDetails);
             Map<String,Object> response = new HashMap<>();
             response.put("token",token);
@@ -73,7 +78,6 @@ public class UserAuthServiceImpl implements UserAuthService {
         newUser.setFullName(fullName);
         newUser.setCreatedOn(new Date());
         newUser.setUpdatedOn(new Date());
-        newUser.setOnline(false);
 
         userDetailDAO.save(newUser);
         Map<String,Object>response = new HashMap<>();
@@ -107,7 +111,7 @@ public class UserAuthServiceImpl implements UserAuthService {
             jwtBlackList.setExpiryDate(expiration);
             jwtBlackListDAO.save(jwtBlackList);
 
-            userDetails.setOnline(false);
+            userDetails.setLogoutTime(new Date());
             userDetailDAO.save(userDetails);
             Map<String,Object> response = new HashMap<>();
             response.put("code",200);
