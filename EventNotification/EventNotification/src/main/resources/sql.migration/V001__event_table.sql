@@ -28,8 +28,9 @@ CREATE TABLE IF NOT EXISTS user_details_entity(
     created_by VARCHAR(64),
     updated_on DATETIME,
     full_name VARCHAR(255),
-    user_email VARCHAR(255) UNIQUE,
+    email VARCHAR(255) UNIQUE,
     password VARCHAR(255),
     login_time DATETIME,
-    logout_time DATETIME
+    logout_time DATETIME,
+    first_login BOOLEAN
 );

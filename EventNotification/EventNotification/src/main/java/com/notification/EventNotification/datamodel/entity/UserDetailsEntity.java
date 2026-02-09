@@ -19,4 +19,5 @@ public class UserDetailsEntity {
     private Date updatedOn;
     private Date loginTime;
     private Date logoutTime;
+    private boolean firstLogin;
 }

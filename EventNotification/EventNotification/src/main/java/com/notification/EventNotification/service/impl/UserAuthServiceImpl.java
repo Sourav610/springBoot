@@ -1,6 +1,5 @@
 package com.notification.EventNotification.service.impl;
 
-import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.notification.EventNotification.datamodel.dao.JwtBlackListDAO;
 import com.notification.EventNotification.datamodel.dao.UserDetailDAO;
 import com.notification.EventNotification.datamodel.entity.JwtBlackList;
@@ -9,11 +8,8 @@ import com.notification.EventNotification.service.UserAuthService;
 import com.notification.EventNotification.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.coyote.Response;
-import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -44,7 +40,8 @@ public class UserAuthServiceImpl implements UserAuthService {
             if(!userDetails.getPassword().equals(password)){
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Wrong Password");
             }
-            if(userDetails.getLoginTime().after(userDetails.getLogoutTime())){
+
+            if(!userDetails.isFirstLogin() && userDetails.getLoginTime().after(userDetails.getLogoutTime())){
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("User Already Logged In");
             }
 
@@ -78,6 +75,7 @@ public class UserAuthServiceImpl implements UserAuthService {
         newUser.setFullName(fullName);
         newUser.setCreatedOn(new Date());
         newUser.setUpdatedOn(new Date());
+        newUser.setFirstLogin(true);
 
         userDetailDAO.save(newUser);
         Map<String,Object>response = new HashMap<>();
