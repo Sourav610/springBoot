@@ -7,4 +7,5 @@ public class LoginRequest {
      String fullName;
      String email;
      String password;
+     Boolean firstTime;
 }
