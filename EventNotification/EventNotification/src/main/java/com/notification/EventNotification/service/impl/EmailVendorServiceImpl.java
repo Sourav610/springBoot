@@ -1,36 +1,48 @@
 package com.notification.EventNotification.service.impl;
 
-import com.notification.EventNotification.service.EmailVendorService;
 import com.mailjet.client.errors.MailjetException;
-import com.mailjet.client.errors.MailjetSocketTimeoutException;
+import com.notification.EventNotification.service.EmailVendorService;
 import com.mailjet.client.MailjetClient;
 import com.mailjet.client.MailjetRequest;
 import com.mailjet.client.MailjetResponse;
 import com.mailjet.client.ClientOptions;
 import com.mailjet.client.resource.Emailv31;
+import com.notification.EventNotification.util.ApiResponseUtil;
+import lombok.extern.slf4j.Slf4j;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 
+@Component
+@Slf4j
 public class EmailVendorServiceImpl implements EmailVendorService {
+
+    @Autowired
+    private ApiResponseUtil apiResponseUtil;
     @Override
-    public String callEmailVendor(String to, String message, String from) {
+    public ResponseEntity<?> callEmailVendor(String to, String message, String from, String subject) throws MailjetException {
+        log.info("Calling email for sending notification..");
         MailjetClient client;
         MailjetRequest request;
         MailjetResponse response;
-        client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"), new ClientOptions("v3.1"));
+        client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
         request = new MailjetRequest(Emailv31.resource)
                 .property(Emailv31.MESSAGES, new JSONArray()
                         .put(new JSONObject()
                                 .put(Emailv31.Message.FROM, new JSONObject()
-                                        .put("Email", "pilot@mailjet.com")
-                                        .put("Name", "Mailjet Pilot"))
+                                        .put("Email", from))
                                 .put(Emailv31.Message.TO, new JSONArray()
                                         .put(new JSONObject()
-                                                .put("Email", "passenger1@mailjet.com")
-                                                .put("Name", "passenger 1")))
-                                .put(Emailv31.Message.SUBJECT, "Your email flight plan!")
-                                .put(Emailv31.Message.TEXTPART, "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!")
-                                .put(Emailv31.Message.HTMLPART, "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!</h3><br />May the delivery force be with you!")));
+                                                .put("Email", to)))
+                                .put(Emailv31.Message.SUBJECT, subject)
+                                .put(Emailv31.Message.HTMLPART, message)));
         response = client.post(request);
-        System.out.println(response.getStatus());
-        System.out.println(response.getData());
+        if(response.getStatus() == 200){
+            return apiResponseUtil.createResponse("Message sent",response.getRawResponseContent(),response.getStatus());
+        }
+        return apiResponseUtil.createResponse("Send failed",response.getRawResponseContent(),response.getStatus());
+
     }
 }

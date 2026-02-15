@@ -38,6 +38,9 @@ public class SendAlertImpl implements SendAlert {
     @Value("${kafka.topic}")
     private String kafkaTopic;
 
+    @Value("${sender.email}")
+    private String fromEmail;
+
     @Override
     @Scheduled(cron="${scheduler.time}")
     public String pushNotification() {
@@ -63,14 +66,14 @@ public class SendAlertImpl implements SendAlert {
 
 
             try {
-                if (todayMonth == month && todayDay == day-1) {
+                if (todayMonth == month && todayDay == day+1) {
                     NotificationMaster notificationMaster = notificationMasterDAO.findByNotificationType(Type);
                     if (notificationMaster == null) {
                         throw new RuntimeException("Template not present");
                     }
                     String message = notificationMaster.getNotificationTemplate();
                     message = message.replace("$Name", eventDetail.getPersonName());
-                    Map<String,Object> newMessage = createKafkaMessage("SMS","ADMIN", eventDetail.getMobileNumber(),null, message);
+                    Map<String,Object> newMessage = createKafkaMessage("EMAIL",fromEmail, eventDetail.getMobileNumber(),null, message);
                     log.info("The message is: "+message);
                     sender.send(kafkaTopic,newMessage.toString());
                     log.info("Data pAushed successfully");
