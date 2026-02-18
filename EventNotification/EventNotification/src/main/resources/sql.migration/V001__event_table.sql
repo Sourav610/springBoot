@@ -19,6 +19,11 @@ CREATE TABLE IF NOT EXISTS notifications (
     updated_on DATETIME,
     alert_limit INT,
     event_details_id INT,
+    status ENUM(
+    'SENT',
+    'FAILED',
+    'UNSENT'
+    ),
     FOREIGN KEY (event_details_id) REFERENCES event_details(id) ON DELETE CASCADE
 );
 

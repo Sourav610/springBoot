@@ -19,5 +19,12 @@ public class NotificationEntity {
     private int alertLimit;
     private int eventDetailsId;
     private int userId;
+    @Enumerated(EnumType.STRING)
+    private NotificationStatus status;
+    public enum NotificationStatus{
+        SENT,
+        UNSENT,
+        FAILED
+    }
 
 }

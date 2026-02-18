@@ -33,9 +33,9 @@ public class kafkaListener {
         String subject = node.get("subject").toString();
         String message = node.get("message").toString();
         String channel = node.get("channel").toString();
-        ResponseEntity<?> response;
+        int notificationId = node.get("notificationId").asInt();
         if(channel.equals("EMAIL")){
-             response = emailVendorService.callEmailVendor(toId,message,fromId,subject);
+             emailVendorService.callEmailVendor(toId,message,fromId,subject,notificationId);
         }
 
     }

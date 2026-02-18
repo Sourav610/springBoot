@@ -1,11 +1,12 @@
 package com.notification.EventNotification.service.impl;
 
 import com.mailjet.client.errors.MailjetException;
+import com.notification.EventNotification.datamodel.dao.NotificationDAO;
+import com.notification.EventNotification.datamodel.entity.NotificationEntity;
 import com.notification.EventNotification.service.EmailVendorService;
 import com.mailjet.client.MailjetClient;
 import com.mailjet.client.MailjetRequest;
 import com.mailjet.client.MailjetResponse;
-import com.mailjet.client.ClientOptions;
 import com.mailjet.client.resource.Emailv31;
 import com.notification.EventNotification.util.ApiResponseUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -15,34 +16,52 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
+
 @Component
 @Slf4j
 public class EmailVendorServiceImpl implements EmailVendorService {
 
     @Autowired
     private ApiResponseUtil apiResponseUtil;
+    @Autowired
+    private NotificationDAO notificationDAO;
     @Override
-    public ResponseEntity<?> callEmailVendor(String to, String message, String from, String subject) throws MailjetException {
+    public ResponseEntity<?> callEmailVendor(String to, String message, String from, String subject,int notificationId) throws MailjetException {
         log.info("Calling email for sending notification..");
         MailjetClient client;
         MailjetRequest request;
         MailjetResponse response;
-        client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
-        request = new MailjetRequest(Emailv31.resource)
-                .property(Emailv31.MESSAGES, new JSONArray()
-                        .put(new JSONObject()
-                                .put(Emailv31.Message.FROM, new JSONObject()
-                                        .put("Email", from))
-                                .put(Emailv31.Message.TO, new JSONArray()
-                                        .put(new JSONObject()
-                                                .put("Email", to)))
-                                .put(Emailv31.Message.SUBJECT, subject)
-                                .put(Emailv31.Message.HTMLPART, message)));
-        response = client.post(request);
-        if(response.getStatus() == 200){
-            return apiResponseUtil.createResponse("Message sent",response.getRawResponseContent(),response.getStatus());
-        }
-        return apiResponseUtil.createResponse("Send failed",response.getRawResponseContent(),response.getStatus());
+        try {
+            client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
+            request = new MailjetRequest(Emailv31.resource)
+                    .property(Emailv31.MESSAGES, new JSONArray()
+                            .put(new JSONObject()
+                                    .put(Emailv31.Message.FROM, new JSONObject()
+                                            .put("Email", from))
+                                    .put(Emailv31.Message.TO, new JSONArray()
+                                            .put(new JSONObject()
+                                                    .put("Email", to)))
+                                    .put(Emailv31.Message.SUBJECT, subject)
+                                    .put(Emailv31.Message.HTMLPART, message)));
+            response = client.post(request);
+            NotificationEntity notification = notificationDAO.findById(notificationId);
+            if (response.getStatus() == 200) {
 
+                if (notification != null) {
+                    notification.setStatus(NotificationEntity.NotificationStatus.SENT);
+                    notificationDAO.save(notification);
+                }
+                return apiResponseUtil.createResponse("Message sent", response.getRawResponseContent(), response.getStatus());
+
+            }
+            notification.setStatus(NotificationEntity.NotificationStatus.FAILED);
+            notificationDAO.save(notification);
+            return apiResponseUtil.createResponse("Send failed", response.getRawResponseContent(), response.getStatus());
+        } catch (Exception e) {
+            NotificationEntity notification = notificationDAO.findById(1);
+            notification.setStatus(NotificationEntity.NotificationStatus.FAILED);
+            notificationDAO.save(notification);
+            throw new RuntimeException(e);
+        }
     }
 }
