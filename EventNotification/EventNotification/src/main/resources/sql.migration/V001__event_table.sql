@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS event_details (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    event_date DATE,
+    event_date DATETIME,
     person_name VARCHAR(256),
     event_type VARCHAR(128),
     mobile_number VARCHAR(15),
