@@ -14,10 +14,14 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+
+import static java.lang.Math.abs;
 
 @Component
 @Slf4j
@@ -46,27 +50,21 @@ public class SendAlertImpl implements SendAlert {
     public String pushNotification() {
         log.info("Pushing notification to kafka server");
         List<EventDataEntity> newEvent = eventDetailsDao.findAll();
-
+        ZoneId zone = ZoneId.of("Asia/Kolkata");
         SimpleDateFormat smf = new SimpleDateFormat("YYYY:MM:DD");
         Calendar cal = Calendar.getInstance();
         for(int i = 0; i<newEvent.size(); i++){
             EventDataEntity eventDetail = newEvent.get(i);
-            Date notificationTime = eventDetail.getEventDate();
             String Type = eventDetail.getEventType();
-            cal.setTime(notificationTime);
-            int day = cal.get(Calendar.DAY_OF_MONTH);
-            int month = cal.get(Calendar.MONTH)+1;
-            log.info("Event Day: {}, month: {} ",day,month);
-
-            Date currTime = new Date();
-            cal.setTime(currTime);
-            int todayDay = cal.get(Calendar.DAY_OF_MONTH);
-            int todayMonth = cal.get(Calendar.MONTH)+1;
-            log.info("Today Day: {}, month: {} ",day,month);
-
+            LocalDateTime nowIst = LocalDateTime.now(zone);
+            LocalDateTime eventIst = eventDetail.getEventDate()
+                    .toInstant()
+                    .atZone(zone)
+                    .toLocalDateTime();
+            long diff = Math.abs(Duration.between(nowIst, eventIst).toMillis());
 
             try {
-                if (todayMonth == month && todayDay == day+1) {
+                if (diff<=1000) {
                     NotificationMaster notificationMaster = notificationMasterDAO.findByNotificationType(Type);
                     if (notificationMaster == null) {
                         throw new RuntimeException("Template not present");
