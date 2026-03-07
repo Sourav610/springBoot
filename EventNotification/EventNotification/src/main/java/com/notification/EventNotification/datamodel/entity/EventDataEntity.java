@@ -3,6 +3,7 @@ package com.notification.EventNotification.datamodel.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -12,7 +13,7 @@ public class EventDataEntity {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private int id;
-    private Date eventDate;
+    private LocalDateTime eventDate;
     private String personName;
     private String mobileNumber;
     private String eventType;

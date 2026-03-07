@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -30,7 +31,7 @@ public class SetAlertServiceImpl implements SetAlertService {
     private ApiResponseUtil apiResponseUtil;
     @Override
     public ResponseEntity<?> pushAlertData(SetAlertRequest setAlertRequest) {
-        Date eventDate = setAlertRequest.getEventDate();
+        LocalDateTime eventDate = setAlertRequest.getEventDate();
         String personName = setAlertRequest.getPersonName();
         String mobileNo;
         String eventType = setAlertRequest.getEventType();

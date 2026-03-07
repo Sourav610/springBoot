@@ -57,10 +57,7 @@ public class SendAlertImpl implements SendAlert {
             EventDataEntity eventDetail = newEvent.get(i);
             String Type = eventDetail.getEventType();
             LocalDateTime nowIst = LocalDateTime.now(zone);
-            LocalDateTime eventIst = eventDetail.getEventDate()
-                    .toInstant()
-                    .atZone(zone)
-                    .toLocalDateTime();
+            LocalDateTime eventIst = eventDetail.getEventDate();
             long diff = Math.abs(Duration.between(nowIst, eventIst).toMillis());
 
             try {
@@ -74,7 +71,7 @@ public class SendAlertImpl implements SendAlert {
                     Map<String,Object> newMessage = createKafkaMessage("EMAIL",fromEmail, eventDetail.getMobileNumber(),null, message);
                     log.info("The message is: "+message);
                     sender.send(kafkaTopic,newMessage.toString());
-                    log.info("Data pAushed successfully");
+                    log.info("Data pushed successfully");
                 }
             }
             catch(Exception e){

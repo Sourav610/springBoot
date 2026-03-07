@@ -107,6 +107,7 @@ public class UserAuthServiceImpl implements UserAuthService {
             jwtBlackList.setToken(token);
             jwtBlackList.setCreatedOn(new Date());
             jwtBlackList.setExpiryDate(expiration);
+            jwtBlackList.setUpdatedOn(new Date());
             jwtBlackListDAO.save(jwtBlackList);
 
             userDetails.setLogoutTime(new Date());

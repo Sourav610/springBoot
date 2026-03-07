@@ -2,11 +2,12 @@ package com.notification.EventNotification.dto;
 
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data
 public class SetAlertRequest {
-    private Date eventDate;
+    private LocalDateTime eventDate;
     private String personName;
     private String notifierNumber;
     private String eventType;

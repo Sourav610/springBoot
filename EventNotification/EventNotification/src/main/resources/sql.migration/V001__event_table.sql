@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS event_details (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    event_date DATETIME,
+    event_date timestamp,
     person_name VARCHAR(256),
     event_type VARCHAR(128),
     mobile_number VARCHAR(15),
@@ -38,4 +38,12 @@ CREATE TABLE IF NOT EXISTS user_details_entity(
     login_time DATETIME,
     logout_time DATETIME,
     first_login BOOLEAN
+);
+
+CREATE TABLE IF NOT EXISTS jwt_black_list(
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    token VARCHAR(255),
+    created_on timestamp,
+    updated_on timestamp,
+    expiry_date timestamp
 );

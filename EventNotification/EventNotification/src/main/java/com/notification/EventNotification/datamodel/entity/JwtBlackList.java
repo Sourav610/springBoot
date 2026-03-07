@@ -18,4 +18,5 @@ public class JwtBlackList {
     String token;
     Date createdOn;
     Date expiryDate;
+    Date updatedOn;
 }
