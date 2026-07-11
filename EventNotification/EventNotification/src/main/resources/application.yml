@@ -1,0 +1,5 @@
+gemini:
+  api-key: AIzaSyDPiX4sjer0i3q5-G6QGHxd5fDhQYYKwAU
+  base-url: https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent
+  timeout-seconds: 15
+  prompt-path: prompts/remainder-parser-prompt

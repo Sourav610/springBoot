@@ -1,6 +1,7 @@
 package com.notification.EventNotification.controller;
 
 import com.notification.EventNotification.dto.SetAlertRequest;
+import com.notification.EventNotification.service.impl.ParseRemainderMapper;
 import com.notification.EventNotification.service.impl.SetAlertServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,9 @@ public class SetAlertController {
     @Autowired
     SetAlertServiceImpl setAlertService;
 
+    @Autowired
+    ParseRemainderMapper parseRemainderMapper;
+
     @PostMapping("/createAlert")
     public ResponseEntity<?> setAlert(@RequestBody SetAlertRequest setAlertRequest){
         log.info("Inside set alert controller..");
@@ -35,5 +39,10 @@ public class SetAlertController {
     public ResponseEntity<?>deleteAlert(@RequestBody SetAlertRequest setAlertRequest){
         log.info("Inside delete Alert for id: {}",setAlertRequest.getEventId());
         return setAlertService.deleteAlerts(setAlertRequest.getEventId());
+    }
+
+    @PostMapping("/parse")
+    public ResponseEntity<?> parseAlert(@RequestBody SetAlertRequest request) {
+        return parseRemainderMapper.parseAlertText(request.getText(), request.getNotifierEmail());
     }
 }

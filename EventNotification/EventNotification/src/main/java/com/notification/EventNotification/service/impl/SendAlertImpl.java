@@ -51,8 +51,6 @@ public class SendAlertImpl implements SendAlert {
         log.info("Pushing notification to kafka server");
         List<EventDataEntity> newEvent = eventDetailsDao.findAll();
         ZoneId zone = ZoneId.of("Asia/Kolkata");
-        SimpleDateFormat smf = new SimpleDateFormat("YYYY:MM:DD");
-        Calendar cal = Calendar.getInstance();
         for(int i = 0; i<newEvent.size(); i++){
             EventDataEntity eventDetail = newEvent.get(i);
             String Type = eventDetail.getEventType();
